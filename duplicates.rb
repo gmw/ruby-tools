@@ -9,7 +9,7 @@ $files_processed = 0
 
 BLOCKSIZE = 8192
 
-# Arbitrary list of directories not to traverse.
+# Arbitrary list of directory names not to traverse.
 BLACKLIST = [ ".", "..", ".DS_Store", ".svn", ".metadata"]
 
 $options = {}
@@ -66,6 +66,9 @@ end
 
 cmd_opts.parse!
 
+# 
+# Use current directory if no directory arguments were given.
+#
 if ARGV.size == 0 then
 	process_dir "." 
 else
@@ -77,12 +80,13 @@ end
 puts "#{$files_processed} files processed."
 puts "#{$files_processed - $files.size} duplicates found."
 
-$files.each_pair {|checksum,filenames|
+# 
+# Report all duplicate file names.
+#
+$files.each_pair { |checksum,filenames|
 	if filenames.size > 1 then
 		puts "#{checksum}:"
-		filenames.each {|name|
-			puts name
-		}
+		filenames.each { |name| puts name }
 		puts
 	end
 }
